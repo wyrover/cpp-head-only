@@ -28,6 +28,10 @@ int main()
 	std::wcout << complete_path_with_modulepath(L"test.txt") << std::endl;
 	std::wcout << get_system_drv() << std::endl;
 
+	std::string result;
+	get_file_str_content(complete_path_with_modulepath(L"test.txt"), &result);
+	std::cout << result << std::endl;
+
     /*const char *codeset = 0;
     char cp[SIZEOF_CP_NAME];
     UINT codepage = GetConsoleCP();

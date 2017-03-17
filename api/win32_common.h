@@ -220,6 +220,7 @@ inline FILE* OpenFile(const string8& filename, const char* mode)
 	return file;
 }
 
+bool get_file_str_content(const string16& path, std::string* contents);
 
 
 
