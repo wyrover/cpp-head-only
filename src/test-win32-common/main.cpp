@@ -32,6 +32,8 @@ int main()
 	get_file_str_content(complete_path_with_modulepath(L"test.txt"), &result);
 	std::cout << result << std::endl;
 
+    std::cout << base64::r_base64_encode("123", 3) << std::endl;
+
     /*const char *codeset = 0;
     char cp[SIZEOF_CP_NAME];
     UINT codepage = GetConsoleCP();

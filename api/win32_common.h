@@ -1,18 +1,52 @@
 #ifndef __CACTUS_WIN32_COMMON_H__
 #define __CACTUS_WIN32_COMMON_H__
 
+typedef __int8 int8_t;
+typedef __int16 int16_t;
+typedef __int32 int32_t;
+typedef __int64 int64_t;
+typedef unsigned __int8 uint8_t;
+typedef unsigned __int16 uint16_t;
+typedef unsigned __int32 uint32_t;
+typedef unsigned __int64 uint64_t;
+typedef uint8_t u_int8_t;
+typedef uint16_t u_int16_t;
+typedef uint32_t u_int32_t;
+typedef uint64_t u_int64_t;
 
-#ifdef WIN32
+
+#ifdef _MSC_VER
+
+#if _MSC_VER >= 1400
+
+    #ifndef _CRT_SECURE_NO_DEPRECATE
+        #define _CRT_SECURE_NO_DEPRECATE
+    #endif
+
+    #ifndef _CRT_SECURE_NO_WARNINGS
+        #define _CRT_SECURE_NO_WARNINGS
+    #endif
+
+#endif
+
 	// 字符串
+#if _MSC_VER < 1900
 	#define snprintf		_snprintf
 	#define snwprintf		_snwprintf
+#endif
+
 	#define strcasecmp		_stricmp
 	#define strncasecmp		_strnicmp
 	#define wcscasecmp		_wcsicmp
 	#define wcsncasecmp		_wcsnicmp
 	#define stristr			StrStrIA
 	#define wcsistr			StrStrIW
-	
+	#define strdate         _strdate
+    #define strtime         _strtime
+
+    #define getpid _getpid
+    #define getcmd  _getcmd
+
 	#include <Shlwapi.h>
 	#pragma comment(lib, "shlwapi.lib")
 #endif
@@ -24,14 +58,19 @@
 #include <vector>
 #include <set>
 
-typedef signed __int64      int64_t;
-typedef unsigned __int64    uint64_t;
+
+
 typedef char				char8;
 typedef wchar_t				char16;
 typedef std::wstring		string16;
 typedef std::string			string8;
 typedef std::string			ustring;
 
+#ifdef _UNICODE
+#define tstring std::wstring
+#else
+#define tstring std::string
+#endif
 
 
 
@@ -223,5 +262,26 @@ inline FILE* OpenFile(const string8& filename, const char* mode)
 bool get_file_str_content(const string16& path, std::string* contents);
 
 
+// windows 错误码
+char* windows_format_error_string(unsigned long dwError, char* pszBuf, int iSize);
+
+// 进程处理
+BOOL TerminateProcessById(DWORD dwProcessID);
+
+
+namespace base64 {
+std::string r_base64_encode(const char* from, size_t length);
+std::string r_base64_decode(const char* from, size_t length);
+
+
+inline std::string r_base64_encode(std::string const& from)
+{
+    return r_base64_encode(from.c_str(), from.length());
+}
+inline std::string r_base64_decode(std::string const& from)
+{
+    return r_base64_decode(from.c_str(), from.length());
+}
+}
 
 #endif // __CACTUS_WIN32_COMMON_H__
